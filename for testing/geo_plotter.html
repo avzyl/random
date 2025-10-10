@@ -162,13 +162,13 @@
         document.addEventListener("DOMContentLoaded", function () {
         const BASE_LAT = 14.8692841;
         const BASE_LNG = 120.8012936;
-        const map = L.map("map").setView([BASE_LAT, BASE_LNG], 16);
+        const map = L.map("map").setView([BASE_LAT, BASE_LNG], 20);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: "© OpenStreetMap contributors",
         }).addTo(map);
 
-        L.marker([BASE_LAT, BASE_LNG]).addTo(map).bindPopup("Base Location");
+        // L.marker([BASE_LAT, BASE_LNG]).addTo(map).bindPopup("Base Location");
 
         const trackedUsers = {};
         const colors = ["red", "blue", "green", "orange", "purple"];
