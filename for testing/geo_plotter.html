@@ -76,8 +76,8 @@
 
     /* Live location animation */
     .pulse-marker {
-      background-color: rgba(0, 123, 255, 0.4);
-      border: 2px solid #007bff;
+      background-color: rgba(0, 123, 255, 0.5);
+      border: 3px solid #007bff;
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -85,18 +85,9 @@
     }
 
     @keyframes pulse {
-      0% {
-        transform: scale(0.8);
-        opacity: 0.8;
-      }
-      70% {
-        transform: scale(1.5);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(0.8);
-        opacity: 0.8;
-      }
+      0% { transform: scale(0.8); opacity: 0.9; }
+      70% { transform: scale(1.6); opacity: 0; }
+      100% { transform: scale(0.8); opacity: 0.9; }
     }
 
     /* Modal Styles */
@@ -133,9 +124,7 @@
       cursor: pointer;
     }
 
-    .close:hover {
-      color: red;
-    }
+    .close:hover { color: red; }
   </style>
 </head>
 <body>
@@ -160,11 +149,11 @@
       <span class="close">&times;</span>
       <h5>Directions</h5>
       <p><b>How To Use?</b><br/>
-        1. Type the location name (e.g. Slot1) <br/> 
-        2. Click the "Start Tracking" button (captures your current location once)
+        1. Type the location name (e.g. Slot1)<br/> 
+        2. Click "Start Tracking" to save your current position once.
       </p>
-      <p><b>Live Blue Dot</b><br/>The blue pulsing dot shows your real-time location so you can track your movement.</p>
-      <p><b>Save Locations</b><br/>Click "Save as File" to download your saved points as a text file.</p>
+      <p><b>Live Blue Dot:</b><br/>Shows your real-time location as you move.</p>
+      <p><b>Save Locations:</b><br/>Click "Save as File" to download your saved points.</p>
     </div>
   </div>
 
@@ -186,6 +175,7 @@
       const output = document.getElementById("outputText");
 
       let liveMarker = null;
+      let firstFix = false;
 
       function createColoredIcon(color) {
         return L.divIcon({
@@ -210,12 +200,14 @@
         output.textContent = text.trim();
       }
 
-      // 🧭 Show live animated location
+      // 🧭 Live location tracking with blue pulsing dot
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition(
           (pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
+
+            // Add or update live marker
             if (!liveMarker) {
               liveMarker = L.marker([lat, lng], {
                 icon: L.divIcon({ className: "pulse-marker" }),
@@ -223,15 +215,21 @@
             } else {
               liveMarker.setLatLng([lat, lng]);
             }
+
+            // Center on user's live location only once at start
+            if (!firstFix) {
+              map.setView([lat, lng], 17);
+              firstFix = true;
+            }
           },
           (err) => console.warn("Live tracking error:", err),
-          { enableHighAccuracy: true }
+          { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
         );
       } else {
         alert("Geolocation not supported by your browser.");
       }
 
-      // ✅ Start Tracking (one-time snapshot)
+      // ✅ Start Tracking (save fixed point)
       document.getElementById("addBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name) return alert("Please enter a name first!");
@@ -248,7 +246,6 @@
               .addTo(map)
               .bindPopup(`<b>${name}</b><br>${lat}, ${lng}`)
               .openPopup();
-            map.setView([lat, lng], 17);
             updateOutput();
           },
           (err) => alert(`Error: ${err.message}`),
@@ -260,7 +257,6 @@
       document.getElementById("removeBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name || !trackedPoints[name]) return alert("No saved location with that name!");
-
         map.eachLayer((layer) => {
           if (layer instanceof L.Marker && layer.getPopup()?.getContent()?.includes(name)) {
             map.removeLayer(layer);
