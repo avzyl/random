@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ctrl+Park Location Plotter</title>
+  <title>Ctrl+Park GeoPlotter</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -24,7 +24,6 @@
       margin-top: 20px;
       border-radius: 10px;
       border: 1px solid #ccc;
-      z-index: 0;
     }
 
     .controls {
@@ -74,22 +73,6 @@
       white-space: pre-line;
     }
 
-    /* Live location animation */
-    .pulse-marker {
-      background-color: rgba(0, 123, 255, 0.5);
-      border: 3px solid #007bff;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.8); opacity: 0.9; }
-      70% { transform: scale(1.6); opacity: 0; }
-      100% { transform: scale(0.8); opacity: 0.9; }
-    }
-
     /* Modal Styles */
     .modal {
       display: none;
@@ -124,12 +107,14 @@
       cursor: pointer;
     }
 
-    .close:hover { color: red; }
+    .close:hover {
+      color: red;
+    }
   </style>
 </head>
 <body>
 
-  <h2>📍 Ctrl+Park Location Plotter</h2>
+  <h2>📍 Ctrl+Park GeoPlotter</h2>
 
   <div class="controls">
     <input type="text" id="locationName" placeholder="Enter name (e.g. Slot1)" />
@@ -149,11 +134,11 @@
       <span class="close">&times;</span>
       <h5>Directions</h5>
       <p><b>How To Use?</b><br/>
-        1. Type the location name (e.g. Slot1)<br/> 
-        2. Click "Start Tracking" to save your current position once.
+        1. Type the location name (e.g. Slot1) <br/> 
+        2. Click the "Start Tracking" button (captures your current location once)
       </p>
-      <p><b>Live Blue Dot:</b><br/>Shows your real-time location as you move.</p>
-      <p><b>Save Locations:</b><br/>Click "Save as File" to download your saved points.</p>
+      <p><b>Live Blue Dot</b><br/>Your current location is shown using Leaflet's built-in blue accuracy circle.</p>
+      <p><b>Save Locations</b><br/>Click "Save as File" to download your saved points as a text file.</p>
     </div>
   </div>
 
@@ -173,9 +158,6 @@
       const colors = ["red", "blue", "green", "orange", "purple"];
       let colorIndex = 0;
       const output = document.getElementById("outputText");
-
-      let liveMarker = null;
-      let firstFix = false;
 
       function createColoredIcon(color) {
         return L.divIcon({
@@ -200,36 +182,36 @@
         output.textContent = text.trim();
       }
 
-      // 🧭 Live location tracking with blue pulsing dot
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-          (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
+      // 🧭 Built-in Leaflet live location
+      map.locate({ watch: true, enableHighAccuracy: true });
+      let currentMarker = null;
 
-            // Add or update live marker
-            if (!liveMarker) {
-              liveMarker = L.marker([lat, lng], {
-                icon: L.divIcon({ className: "pulse-marker" }),
-              }).addTo(map);
-            } else {
-              liveMarker.setLatLng([lat, lng]);
-            }
+      map.on("locationfound", (e) => {
+        if (!currentMarker) {
+          currentMarker = L.marker(e.latlng).addTo(map);
+        } else {
+          currentMarker.setLatLng(e.latlng);
+        }
 
-            // Center on user's live location only once at start
-            if (!firstFix) {
-              map.setView([lat, lng], 17);
-              firstFix = true;
-            }
-          },
-          (err) => console.warn("Live tracking error:", err),
-          { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
-        );
-      } else {
-        alert("Geolocation not supported by your browser.");
-      }
+        // Optional accuracy circle
+        if (!currentMarker.accuracyCircle) {
+          currentMarker.accuracyCircle = L.circle(e.latlng, {
+            radius: e.accuracy,
+            color: "#136AEC",
+            fillColor: "#136AEC",
+            fillOpacity: 0.2,
+          }).addTo(map);
+        } else {
+          currentMarker.accuracyCircle.setLatLng(e.latlng);
+          currentMarker.accuracyCircle.setRadius(e.accuracy);
+        }
+      });
 
-      // ✅ Start Tracking (save fixed point)
+      map.on("locationerror", (e) => {
+        alert("Location access denied or unavailable.");
+      });
+
+      // ✅ Start Tracking (one-time snapshot)
       document.getElementById("addBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name) return alert("Please enter a name first!");
@@ -246,6 +228,7 @@
               .addTo(map)
               .bindPopup(`<b>${name}</b><br>${lat}, ${lng}`)
               .openPopup();
+            map.setView([lat, lng], 17);
             updateOutput();
           },
           (err) => alert(`Error: ${err.message}`),
@@ -257,6 +240,7 @@
       document.getElementById("removeBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name || !trackedPoints[name]) return alert("No saved location with that name!");
+
         map.eachLayer((layer) => {
           if (layer instanceof L.Marker && layer.getPopup()?.getContent()?.includes(name)) {
             map.removeLayer(layer);
