@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ctrl+Park GeoPlotter</title>
+  <title>Ctrl+Park Location Plotter</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -74,6 +74,31 @@
       white-space: pre-line;
     }
 
+    /* Live location animation */
+    .pulse-marker {
+      background-color: rgba(0, 123, 255, 0.4);
+      border: 2px solid #007bff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+      70% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+    }
+
     /* Modal Styles */
     .modal {
       display: none;
@@ -111,15 +136,11 @@
     .close:hover {
       color: red;
     }
-
-    h5 {
-      margin-top: 0;
-    }
   </style>
 </head>
 <body>
 
-  <h2>Ctrl+Park GeoPlotter</h2>
+  <h2>📍 Ctrl+Park Location Plotter</h2>
 
   <div class="controls">
     <input type="text" id="locationName" placeholder="Enter name (e.g. Slot1)" />
@@ -131,9 +152,7 @@
 
   <div id="map"></div>
 
-  <div class="output" id="outputText">
-    No saved locations yet.
-  </div>
+  <div class="output" id="outputText">No saved locations yet.</div>
 
   <!-- Modal -->
   <div id="directionsModal" class="modal">
@@ -142,22 +161,13 @@
       <h5>Directions</h5>
       <p><b>How To Use?</b><br/>
         1. Type the location name (e.g. Slot1) <br/> 
-        2. Click the "Start Tracking" button <br/>
-        (It saves your current GPS location once.)
+        2. Click the "Start Tracking" button (captures your current location once)
       </p>
-
-      <p><b>How To Delete?</b><br/>
-        1. Type the location name (e.g. Slot1) <br/> 
-        2. Click the "Remove Tracker" button <br/>
-      </p>
-
-      <p><b>Save Locations</b><br/>
-        Click "Save as File" to download all saved locations as a text file.
-      </p>
+      <p><b>Live Blue Dot</b><br/>The blue pulsing dot shows your real-time location so you can track your movement.</p>
+      <p><b>Save Locations</b><br/>Click "Save as File" to download your saved points as a text file.</p>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
@@ -170,12 +180,12 @@
         attribution: "© OpenStreetMap contributors",
       }).addTo(map);
 
-      L.marker([BASE_LAT, BASE_LNG]).addTo(map).bindPopup("Base Location");
-
       const trackedPoints = {};
       const colors = ["red", "blue", "green", "orange", "purple"];
       let colorIndex = 0;
       const output = document.getElementById("outputText");
+
+      let liveMarker = null;
 
       function createColoredIcon(color) {
         return L.divIcon({
@@ -200,7 +210,28 @@
         output.textContent = text.trim();
       }
 
-      // Start Tracking (one-time capture)
+      // 🧭 Show live animated location
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            if (!liveMarker) {
+              liveMarker = L.marker([lat, lng], {
+                icon: L.divIcon({ className: "pulse-marker" }),
+              }).addTo(map);
+            } else {
+              liveMarker.setLatLng([lat, lng]);
+            }
+          },
+          (err) => console.warn("Live tracking error:", err),
+          { enableHighAccuracy: true }
+        );
+      } else {
+        alert("Geolocation not supported by your browser.");
+      }
+
+      // ✅ Start Tracking (one-time snapshot)
       document.getElementById("addBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name) return alert("Please enter a name first!");
@@ -212,13 +243,11 @@
             const lat = pos.coords.latitude.toFixed(6);
             const lng = pos.coords.longitude.toFixed(6);
             const color = colors[colorIndex++ % colors.length];
-
             trackedPoints[name] = { lat, lng, color };
             L.marker([lat, lng], { icon: createColoredIcon(color) })
               .addTo(map)
               .bindPopup(`<b>${name}</b><br>${lat}, ${lng}`)
               .openPopup();
-
             map.setView([lat, lng], 17);
             updateOutput();
           },
@@ -227,14 +256,13 @@
         );
       });
 
-      // Remove tracker
+      // ✅ Remove tracker
       document.getElementById("removeBtn").addEventListener("click", () => {
         const name = document.getElementById("locationName").value.trim();
         if (!name || !trackedPoints[name]) return alert("No saved location with that name!");
-        
-        // Remove marker
+
         map.eachLayer((layer) => {
-          if (layer instanceof L.Marker && layer.getPopup().getContent().includes(name)) {
+          if (layer instanceof L.Marker && layer.getPopup()?.getContent()?.includes(name)) {
             map.removeLayer(layer);
           }
         });
@@ -262,7 +290,6 @@
       const modal = document.getElementById("directionsModal");
       const btn = document.getElementById("directionsBtn");
       const span = document.querySelector(".close");
-
       btn.onclick = () => (modal.style.display = "block");
       span.onclick = () => (modal.style.display = "none");
       window.onclick = (event) => {
@@ -270,6 +297,5 @@
       };
     });
   </script>
-
 </body>
 </html>
