@@ -1,0 +1,47 @@
+<<=============== SYNTAX ===============>>
+#include <stdio.h> - header file library
+main() - function
+printf() - output/print text
+!!! Note that every C statement ends wiht a semicolon ;
+> The compiler ignores white spaces
+return 0 - ends the main() function
+} - curly bracket ends the main function
+
+------
+#include <stdio.h>
+
+int main() {
+  printf("Hello World!\n");
+  printf("I am learning C.");
+  return 0;
+}
+------
+
+
+<<=============== NEW LINE ===============>>
+\n - insert a new line
+\n\n - blank line
+
+
+<<=============== COMMENT ===============>>
+// - single  line comment
+/* */ - multi-line comments
+
+
+<<=============== VARIABLES ===============>>
+int - whole numbers
+float - decimal
+char - single characters, surrounded by single quotes
+
+syntax: type variableName = value; (int myNum = 15;)
+
+
+<<=============== FORMAT SPECIFIER ===============>>
+a format specifier starts with a percentage sign %, followed by a character, surrounded by double quotes ("")
+
+%d - int
+%c - char
+%f - float
+
+<<=============== VARIABLE VALUES ===============>>
+if you assign a new value to an existing variable, it will overwrite the previous value
