@@ -42,6 +42,8 @@ a format specifier starts with a percentage sign %, followed by a character, sur
 %d - int
 %c - char
 %f - float
+%lf - double
+%s - string
 
 <<=============== VARIABLE VALUES ===============>>
 if you assign a new value to an existing variable, it will overwrite the previous value
