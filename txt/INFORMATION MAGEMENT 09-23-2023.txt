@@ -1,0 +1,41 @@
+LESSON 1
+Importance of Information Management
+1. Managing your informaion saves you money.
+2. Managing your information makes you money.
+3. Managing information keeps you out of trouble.
+
+Goals of Information Management
+1. Supply
+2. Improve
+3. Create
+4. Efficiency
+5. Reduce
+
+Information Life cycle
+The idea of an information life cycle is derived from records management, where the idea of document life cycle is central to the overall process.
+
+Information Lifecycle Management
+
+- Capturing Data
+- Preseving Data
+- Grouping Data
+- Processing Data
+- Publishing Data
+- Archiving Data
+- Removing Data
+
+Tools of Infomation Management
+Information audit
+- The idea of infomation audit is derived from financial audits in accounting, which, as Ellis et al. (1993) note, are generally 'compliance' audits, undertaken to ensure that the organization is adhering to proper fiscal and legal standards in its financial management.
+
+Information mapping
+- A method of bringing together current learning research and instructional technology into a comprehensive materials development and presentation technology to improve technical communication.
+
+Data is an information, oraganize information in numbers, symbols and alphabet
+
+Two types of data: Structured and Unstructured Data
+
+Structures - databases, excel, spreadsheets
+Unstructured - image, videos, audios
+
+

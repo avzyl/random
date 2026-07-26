@@ -1,0 +1,79 @@
+import java.io.*;
+import java.util.*;
+
+class User {
+    String name;
+    String status;
+
+    public User(String name, String status) {
+        this.name = name;
+        this.status = status;
+    }
+}
+
+class Admin {
+    List<User> users;
+    String fileName;
+
+    public Admin(String fileName) {
+        this.fileName = fileName;
+        this.users = new ArrayList<User>();
+        readUsersFromFile();
+    }
+
+    public void addUser(String name, String status) {
+        User user = new User(name, status);
+        users.add(user);
+        writeUsersToFile();
+    }
+
+    public void setUserStatus(String name, String status) {
+        for (User user : users) {
+            if (user.name.equals(name)) {
+                user.status = status;
+                writeUsersToFile();
+                return;
+            }
+        }
+        System.out.println("User not found.");
+    }
+
+    private void readUsersFromFile() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" ");
+                String name = parts[0];
+                String status = parts[1];
+                users.add(new User(name, status));
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+    }
+
+    private void writeUsersToFile() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            for (User user : users) {
+                writer.write(user.name + " " + user.status + "\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to file.");
+        }
+    }
+}
+
+public class UserManager {
+    public static void main(String[] args) {
+        Admin admin = new Admin("users.txt");
+        admin.addUser("Alice", "active");
+        admin.addUser("Bob", "active");
+        admin.setUserStatus("Alice", "inactive");
+    }
+}

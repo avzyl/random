@@ -1,0 +1,46 @@
+Step 1: Ask the user to enter player number and assign to player_num.
+Step 2: Ask the User to enter their battle piece and assign to battle_piece.
+Step 3: Initialize battle_results to ""
+Step 4: Check battle_piece.
+	Step 4.1: if battle_piece == "General", then:
+			Step 4.1.1: if battle_piece == "Spy", then:
+				battle_results = "Lose"
+			Step 4.1.2: elif piece_name == "General", then:
+				battle_results = "Tie"
+			Step 4.1.3: else, then:
+				battle results = "Win"
+       Step 4.2: if piece_name == "Colonel", then:
+			Step 4.2.1: if battle_piece == "Spy", then:
+				battle_results = "Lose"
+			Step 4.2.2: elif battle_piece == "General", then:
+				battle_results = "Lose"
+			Step 4.2.3: elif battle_piece == "Colonel", then:
+				battle_results = "Tie"
+			Step 4.2.4: else, then:
+				battle_results = "Win"
+	Step 4.3: if piece_name == "Lieutenant", then:
+			Step 4.3.1: if battle_piece == "Spy", then:
+				battle_results = "Lose"
+			Step 4.3.2: elif battle_piece == "General", then:
+				battle_results = "Lose"
+			Step 4.3.3: elif battle_piece == "Colonel", then:
+				battle_results = "Lose"
+			Step 4.3.4: elif battle_piece == "Lieutenant", then:
+				battle_results = "Tie"
+			Step 4.3.5: else, then:
+				battle_results = "Win" 
+	Step 4.4: if piece_name == "Private", then:
+			Step 4.3.1: if battle_piece == "Spy", then:
+				battle_results = "Win"
+			Step 4.3.5: else, then:
+				battle_results = "Lose" 
+	Step 4.5: if piece_name == "Spy", then:
+			Step 4.5.1: if battle_piece == "Spy", then:
+				battle_results = "Tie"
+			Step 4.5.2: elif piece_name == "Private", then:
+				battle_results = "Lose"
+			Step 4.5.3: else, then:
+				battle_results = "Win"
+Step 5: Diplay battle_result
+			
+		 	

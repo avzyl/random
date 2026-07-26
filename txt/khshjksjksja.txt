@@ -1,0 +1,352 @@
+Enter password: ************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.1.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database registration;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lyzza              |
+| mysql              |
+| performance_schema |
+| registration       |
+| sys                |
++--------------------+
+6 rows in set (0.06 sec)
+
+mysql> use registration;
+Database changed
+mysql> create table users;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> create table users (id int AUTO_INCREMENT PRIMARY KEY, USERNAME varchar (255), EMAIL_ADDRESS varchar (255));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show columns from users;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | int          | NO   | PRI | NULL    | auto_increment |
+| USERNAME      | varchar(255) | YES  |     | NULL    |                |
+| EMAIL_ADDRESS | varchar(255) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.03 sec)
+
+mysql> insert into users (id, USERNAME, EMAIL_ADDRESS) values ('','polarisrossa','abig2233635@gmail.com');
+ERROR 1366 (HY000): Incorrect integer value: '' for column 'id' at row 1
+mysql> insert into users (id, USERNAME, EMAIL_ADDRESS) values ('polarisrossa','abig2233635@gmail.com');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into users (USERNAME, EMAIL_ADDRESS) values ('polarisrossa','abig2233635@gmail.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from users;
++----+--------------+-----------------------+
+| id | USERNAME     | EMAIL_ADDRESS         |
++----+--------------+-----------------------+
+|  1 | polarisrossa | abig2233635@gmail.com |
++----+--------------+-----------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into users (USERNAME, EMAIL_ADDRESS) values ('beyyy','cortez2231644@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into users (USERNAME, EMAIL_ADDRESS) values ('beyyy','lumbad2232373@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into users (USERNAME, EMAIL_ADDRESS) values ('nicaaa','villa2232782@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into users (USERNAME, EMAIL_ADDRESS) values ('tonton','zapata2235396@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from users;
++----+--------------+-------------------------+
+| id | USERNAME     | EMAIL_ADDRESS           |
++----+--------------+-------------------------+
+|  1 | polarisrossa | abig2233635@gmail.com   |
+|  2 | beyyy        | cortez2231644@gmail.com |
+|  3 | beyyy        | lumbad2232373@gmail.com |
+|  4 | nicaaa       | villa2232782@gmail.com  |
+|  5 | tonton       | zapata2235396@gmail.com |
++----+--------------+-------------------------+
+5 rows in set (0.00 sec)
+
+mysql> update users EMAIL_ADDRESS='abig2233635@ceu.edu.ph'where EMAIL_ADDRESS='abig2233635@gmail.com';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '='abig2233635@ceu.edu.ph'where EMAIL_ADDRESS='abig2233635@gmail.com'' at line 1
+mysql> update users EMAIL_ADDRESS='abig2233635@ceu.edu.ph' where EMAIL_ADDRESS='abig2233635@gmail.com';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '='abig2233635@ceu.edu.ph' where EMAIL_ADDRESS='abig2233635@gmail.com'' at line 1
+mysql> update users set EMAIL_ADDRESS='abig2233635@ceu.edu.ph' where EMAIL_ADDRESS='abig2233635@gmail.com';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from users;
++----+--------------+-------------------------+
+| id | USERNAME     | EMAIL_ADDRESS           |
++----+--------------+-------------------------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph  |
+|  2 | beyyy        | cortez2231644@gmail.com |
+|  3 | beyyy        | lumbad2232373@gmail.com |
+|  4 | nicaaa       | villa2232782@gmail.com  |
+|  5 | tonton       | zapata2235396@gmail.com |
++----+--------------+-------------------------+
+5 rows in set (0.00 sec)
+
+mysql> update users set EMAIL_ADDRESS='cortez2231644@mls.edu.ph' where EMAIL_ADDRESS='cortez2231644@gmail.com';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set EMAIL_ADDRESS='lumbad2232373@ceu.edu.ph' where EMAIL_ADDRESS='lumbad2232373@gmail.com';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set EMAIL_ADDRESS='villa2232782@ceu.edu.ph' where EMAIL_ADDRESS='villa2232782@gmail.com';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set EMAIL_ADDRESS='zapata2235396@ceu.edu.ph' where EMAIL_ADDRESS='zapata2235396@gmail.com';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set EMAIL_ADDRESS='cortez2231644@ceu.edu.ph' where EMAIL_ADDRESS='cortez2231644@mls.edu.ph';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set USERNAME='nire' where USERNAME='beyyy';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from users;
++----+--------------+--------------------------+
+| id | USERNAME     | EMAIL_ADDRESS            |
++----+--------------+--------------------------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   |
+|  2 | nire         | cortez2231644@ceu.edu.ph |
+|  3 | nire         | lumbad2232373@ceu.edu.ph |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  |
+|  5 | tonton       | zapata2235396@ceu.edu.ph |
++----+--------------+--------------------------+
+5 rows in set (0.00 sec)
+
+mysql> update users set USERNAME='nire' where id=2;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from users;
++----+--------------+--------------------------+
+| id | USERNAME     | EMAIL_ADDRESS            |
++----+--------------+--------------------------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   |
+|  2 | nire         | cortez2231644@ceu.edu.ph |
+|  3 | nire         | lumbad2232373@ceu.edu.ph |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  |
+|  5 | tonton       | zapata2235396@ceu.edu.ph |
++----+--------------+--------------------------+
+5 rows in set (0.00 sec)
+
+mysql> update users set USERNAME='beyyy' where id=2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from users;
++----+--------------+--------------------------+
+| id | USERNAME     | EMAIL_ADDRESS            |
++----+--------------+--------------------------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   |
+|  2 | beyyy        | cortez2231644@ceu.edu.ph |
+|  3 | nire         | lumbad2232373@ceu.edu.ph |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  |
+|  5 | tonton       | zapata2235396@ceu.edu.ph |
++----+--------------+--------------------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table users;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from users;
++----+--------------+--------------------------+
+| id | USERNAME     | EMAIL_ADDRESS            |
++----+--------------+--------------------------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   |
+|  2 | beyyy        | cortez2231644@ceu.edu.ph |
+|  3 | nire         | lumbad2232373@ceu.edu.ph |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  |
+|  5 | tonton       | zapata2235396@ceu.edu.ph |
++----+--------------+--------------------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table users
+    -> add (age int);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table users
+    -> add age int;
+ERROR 1060 (42S21): Duplicate column name 'age'
+mysql> select * from users;
++----+--------------+--------------------------+------+
+| id | USERNAME     | EMAIL_ADDRESS            | age  |
++----+--------------+--------------------------+------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   | NULL |
+|  2 | beyyy        | cortez2231644@ceu.edu.ph | NULL |
+|  3 | nire         | lumbad2232373@ceu.edu.ph | NULL |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  | NULL |
+|  5 | tonton       | zapata2235396@ceu.edu.ph | NULL |
++----+--------------+--------------------------+------+
+5 rows in set (0.00 sec)
+
+mysql> update users set age=19 where id=1,2,3,4;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',2,3,4' at line 1
+mysql> update users set age=19 where id=1;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set age=19 where id=2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set age=19 where id=3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set age=19 where id=4;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update users set age=20 where id=5;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from users;
++----+--------------+--------------------------+------+
+| id | USERNAME     | EMAIL_ADDRESS            | age  |
++----+--------------+--------------------------+------+
+|  1 | polarisrossa | abig2233635@ceu.edu.ph   |   19 |
+|  2 | beyyy        | cortez2231644@ceu.edu.ph |   19 |
+|  3 | nire         | lumbad2232373@ceu.edu.ph |   19 |
+|  4 | nicaaa       | villa2232782@ceu.edu.ph  |   19 |
+|  5 | tonton       | zapata2235396@ceu.edu.ph |   20 |
++----+--------------+--------------------------+------+
+5 rows in set (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lyzza              |
+| mysql              |
+| performance_schema |
+| registration       |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use registration;
+Database changed
+mysql> create table profile;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> create table profile (id int AUTO_INCREMENT PRIMAY KEY, first_name varchar (255), last_name varchar (255);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PRIMAY KEY, first_name varchar (255), last_name varchar (255)' at line 1
+mysql> create table profile (id int AUTO_INCREMENT PRIMAY KEY, first_name varchar (255), last_name varchar (255));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PRIMAY KEY, first_name varchar (255), last_name varchar (255))' at line 1
+mysql> create table users (id int AUTO_INCREMENT PRIMARY KEY, first_name varchar (255), last_name varchar (255));
+ERROR 1050 (42S01): Table 'users' already exists
+mysql> create table profile (id int AUTO_INCREMENT PRIMARY KEY, first_name varchar (255), last_name varchar (255));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show table from users;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from users' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lyzza              |
+| mysql              |
+| performance_schema |
+| registration       |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use registration;
+Database changed
+mysql> select * from registration;
+ERROR 1146 (42S02): Table 'registration.registration' doesn't exist
+mysql> show tables from registration;
++------------------------+
+| Tables_in_registration |
++------------------------+
+| profile                |
+| users                  |
++------------------------+
+2 rows in set (0.01 sec)
+
+mysql> use profile;
+ERROR 1049 (42000): Unknown database 'profile'
+mysql> select * from profile;
+Empty set (0.00 sec)
+
+mysql> insert into profile (first_name, last_name) values ('Lyzza', 'Abig');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into profile (first_name, last_name) values ('Bea', 'Cortez');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into profile (first_name, last_name) values ('Erine', 'Lumbad');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into profile (first_name, last_name) values ('Adonica', 'Villa');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into profile (first_name, last_name) values ('Marc', 'Zapata');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from profile;
++----+------------+-----------+
+| id | first_name | last_name |
++----+------------+-----------+
+|  1 | Lyzza      | Abig      |
+|  2 | Bea        | Cortez    |
+|  3 | Erine      | Lumbad    |
+|  4 | Adonica    | Villa     |
+|  5 | Marc       | Zapata    |
++----+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> show columns from profile;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int          | NO   | PRI | NULL    | auto_increment |
+| first_name | varchar(255) | YES  |     | NULL    |                |
+| last_name  | varchar(255) | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lyzza              |
+| mysql              |
+| performance_schema |
+| registration       |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql>

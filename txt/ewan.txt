@@ -1,0 +1,15 @@
+1. Gumawa ng oracle account: https://login.oracle.com/mysso/signon.jsp
+2. email add: ceu gmail
+password: kayo na bahala s'yempre 😔
+retype password:
+country: default na ph 
+name: 
+job title: N/A
+work phone: number mo
+company: CEU
+Address: ceu address 
+City:
+State:
+ZiP:
+3. mag log in kayo kung hindi pa nag automatic na log in, username niyo is 'yung ceu gmail tapos pass
+4. search niyo "oracle java 11 download" or p'wede ding mas mababa sa 11 basta hanggang 8

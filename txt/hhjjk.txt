@@ -1,0 +1,92 @@
+static ArrayList<User> users = new ArrayList<>();
+static File file = new File("users.txt");
+
+public static void main(String[] args) {
+
+    // Check if the file exists, if not create it
+    if (!file.exists()) {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    while (true) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the user management system!");
+        System.out.println("1. Add new user");
+        System.out.println("2. Activate user");
+        System.out.println("3. Deactivate user");
+        System.out.println("4. View recorded users");
+        System.out.println("5. Exit");
+        System.out.print("Enter an option: ");
+
+        int option = scanner.nextInt();
+
+        switch (option) {
+            case 1:
+                addNewUser();
+                break;
+            case 2:
+                activateUser();
+                break;
+            case 3:
+                deactivateUser();
+                break;
+            case 4:
+                viewRecordedUsers();
+                break;
+            case 5:
+                exit();
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+        }
+    }
+}
+
+public static void addNewUser() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter the username: ");
+    String username = scanner.nextLine();
+    System.out.print("Enter the password: ");
+    String password = scanner.nextLine();
+
+    User newUser = new User(username, password);
+    users.add(newUser);
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+        bw.write(username + "," + password + ",active");
+        bw.newLine();
+        bw.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    System.out.println("User added successfully!");
+}
+
+public static void activateUser() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter the username: ");
+    String username = scanner.nextLine();
+
+    for (User user : users) {
+        if (user.getUsername().equals(username)) {
+            user.setStatus("active");
+            System.out.println("User activated successfully!");
+            updateFile();
+            return;
+        }
+    }
+
+    System.out.println("User not found.");
+}
+
+public static void deactivateUser() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter the username: ");
+    String username = scanner.nextLine();
+
+    for (User user :

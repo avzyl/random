@@ -1,0 +1,87 @@
+import java.util.*;
+
+public class LibrarySystem {
+  // Constants for transaction status
+  public static final int BORROWED = 1;
+  public static final int RETURNED = 2;
+
+  // Users of the system
+  private static Map<String, User> users = new HashMap<>();
+
+  // Books in the system
+  private static List<Book> books = new ArrayList<>();
+
+  public static void main(String[] args) {
+    // Initialize users
+    users.put("admin", new AdminUser("admin"));
+    users.put("user1", new RegularUser("user1"));
+    users.put("user2", new RegularUser("user2"));
+
+    // Initialize books
+    books.add(new Book("The Great Gatsby", "F. Scott Fitzgerald"));
+    books.add(new Book("Pride and Prejudice", "Jane Austen"));
+    books.add(new Book("To Kill a Mockingbird", "Harper Lee"));
+
+    // Login as admin user
+    User admin = users.get("admin");
+    admin.login();
+
+    // Add new user
+    admin.addUser(new RegularUser("user3"));
+
+    // Deactivate existing user
+    admin.deactivateUser(users.get("user2"));
+
+    // Add new book
+    admin.addBook(new Book("The Catcher in the Rye", "J.D. Salinger"));
+
+    // Update book details
+    Book bookToUpdate = books.get(1);
+    bookToUpdate.setTitle("Sense and Sensibility");
+    bookToUpdate.setAuthor("Jane Austen");
+    admin.updateBook(bookToUpdate);
+
+    // Logout
+    admin.logout();
+
+    // Login as regular user
+    User user1 = users.get("user1");
+    user1.login();
+
+    // Attempt to add new user (should not be allowed)
+    try {
+      user1.addUser(new RegularUser("user4"));
+    } catch (UnsupportedOperationException e) {
+      System.out.println("Error: Regular users are not allowed to add new users.");
+    }
+
+    // Attempt to deactivate user (should not be allowed)
+    try {
+      user1.deactivateUser(users.get("user3"));
+    } catch (UnsupportedOperationException e) {
+      System.out.println("Error: Regular users are not allowed to deactivate users.");
+    }
+
+    // Borrow book
+    user1.borrowBook(books.get(0));
+
+    // View transaction history
+    List<Transaction> transactions = user1.getTransactionHistory();
+    for (Transaction transaction : transactions) {
+      System.out.println(transaction);
+    }
+
+    // Logout
+    user1.logout();
+
+    // View summary report of borrowed books per day
+    Map<Date, List<Book>> summary = admin.getBorrowedBooksPerDay();
+    for (Date date : summary.keySet()) {
+      System.out.println("Date: " + date);
+      System.out.println("Books: " + summary.get(date));
+    }
+  }
+}
+
+// Abstract base class for users
+abstract class User {
